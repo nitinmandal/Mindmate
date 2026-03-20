@@ -1,0 +1,145 @@
+import { db } from '@/db';
+import { therapists } from '@/db/schema';
+
+async function main() {
+    const sampleTherapists = [
+        {
+            name: 'Dr. Sarah Martinez',
+            email: 'sarah.martinez@mindmate.com',
+            bio: 'Clinical Psychologist with 12 years of experience specializing in evidence-based treatments for anxiety and depression. I utilize cognitive behavioral therapy and mindfulness techniques to help clients develop practical coping strategies. My approach is collaborative and focused on creating a safe, non-judgmental space for healing.',
+            specialization: 'anxiety, depression, work stress, life transitions',
+            rating: 4.9,
+            image: 'from-purple-400 to-pink-400',
+            available: true,
+            createdAt: new Date(),
+        },
+        {
+            name: 'Dr. James Chen',
+            email: 'james.chen@mindmate.com',
+            bio: 'Licensed Psychiatrist with 15 years of experience treating complex mood disorders and PTSD. I combine medication management with therapeutic interventions to provide comprehensive mental health care. My practice emphasizes the integration of mind-body wellness and trauma-informed approaches.',
+            specialization: 'trauma, ptsd, bipolar, depression',
+            rating: 5.0,
+            image: 'from-blue-400 to-cyan-400',
+            available: true,
+            createdAt: new Date(),
+        },
+        {
+            name: 'Licensed Therapist Emma Williams',
+            email: 'emma.williams@mindmate.com',
+            bio: 'Marriage & Family Therapist with 10 years helping individuals and couples navigate relationship challenges and family dynamics. I use attachment-based therapy and the Gottman method to strengthen communication and emotional connection. My warm, empathetic style helps clients feel understood and supported.',
+            specialization: 'relationships, family therapy, anxiety, life transitions',
+            rating: 4.8,
+            image: 'from-green-400 to-emerald-400',
+            available: true,
+            createdAt: new Date(),
+        },
+        {
+            name: 'Dr. Michael Thompson',
+            email: 'michael.thompson@mindmate.com',
+            bio: 'Clinical Social Worker specializing in addiction recovery and dual diagnosis treatment for 13 years. I believe in the power of compassionate, client-centered therapy combined with evidence-based practices. My approach helps clients build resilience and develop sustainable recovery strategies.',
+            specialization: 'addiction, depression, trauma, work stress',
+            rating: 4.7,
+            image: 'from-orange-400 to-red-400',
+            available: false,
+            createdAt: new Date(),
+        },
+        {
+            name: 'Dr. Priya Patel',
+            email: 'priya.patel@mindmate.com',
+            bio: 'Licensed Professional Counselor with 11 years of experience working with anxiety disorders, OCD, and perfectionism. I integrate cognitive behavioral therapy with acceptance and commitment therapy to help clients break free from unhelpful thought patterns. My culturally sensitive approach honors diverse backgrounds and experiences.',
+            specialization: 'anxiety, ocd, work stress, depression',
+            rating: 4.9,
+            image: 'from-indigo-400 to-purple-400',
+            available: true,
+            createdAt: new Date(),
+        },
+        {
+            name: 'Licensed Therapist Marcus Johnson',
+            email: 'marcus.johnson@mindmate.com',
+            bio: 'Clinical Psychologist with 9 years providing affirming therapy for LGBTQ+ individuals and addressing issues of identity, relationships, and discrimination. I create a welcoming space where clients can explore their authentic selves without judgment. My intersectional approach recognizes the complexity of identity and experience.',
+            specialization: 'lgbtq+ issues, anxiety, depression, relationships',
+            rating: 5.0,
+            image: 'from-teal-400 to-blue-400',
+            available: true,
+            createdAt: new Date(),
+        },
+        {
+            name: 'Dr. Rebecca Cohen',
+            email: 'rebecca.cohen@mindmate.com',
+            bio: 'Marriage & Family Therapist specializing in grief counseling and life transitions for 14 years. I help clients navigate loss, major life changes, and finding meaning after difficult experiences. My compassionate, strength-based approach supports clients in honoring their journey while building hope for the future.',
+            specialization: 'grief, life transitions, depression, family therapy',
+            rating: 4.8,
+            image: 'from-rose-400 to-pink-400',
+            available: true,
+            createdAt: new Date(),
+        },
+        {
+            name: 'Dr. David Kim',
+            email: 'david.kim@mindmate.com',
+            bio: 'Licensed Psychiatrist with 12 years treating ADHD, anxiety, and mood disorders across the lifespan. I provide thorough diagnostic assessments and personalized treatment plans that may include medication, therapy, and lifestyle interventions. My collaborative style empowers clients to take an active role in their mental health.',
+            specialization: 'adhd, anxiety, depression, work stress',
+            rating: 4.7,
+            image: 'from-amber-400 to-orange-400',
+            available: true,
+            createdAt: new Date(),
+        },
+        {
+            name: 'Licensed Therapist Nicole Anderson',
+            email: 'nicole.anderson@mindmate.com',
+            bio: 'Clinical Social Worker with 10 years specializing in eating disorders and body image issues using a Health At Every Size approach. I help clients develop a healthier relationship with food, movement, and their bodies through compassionate, non-diet focused therapy. Recovery is possible, and I am here to support you every step of the way.',
+            specialization: 'eating disorders, anxiety, depression, trauma',
+            rating: 4.9,
+            image: 'from-violet-400 to-fuchsia-400',
+            available: true,
+            createdAt: new Date(),
+        },
+        {
+            name: 'Dr. Alexandra Rodriguez',
+            email: 'alexandra.rodriguez@mindmate.com',
+            bio: 'Clinical Psychologist with 13 years helping clients heal from trauma and PTSD using EMDR and somatic experiencing. I understand that trauma lives in the body as well as the mind, and my approach addresses both. My work creates a foundation of safety and trust while gently processing difficult experiences.',
+            specialization: 'trauma, ptsd, anxiety, grief',
+            rating: 5.0,
+            image: 'from-cyan-400 to-teal-400',
+            available: true,
+            createdAt: new Date(),
+        },
+        {
+            name: 'Licensed Therapist Christopher Lee',
+            email: 'christopher.lee@mindmate.com',
+            bio: 'Licensed Professional Counselor with 8 years working with young adults navigating career stress, relationships, and identity formation. I use a strengths-based approach that helps clients recognize their resilience and potential. My warm, authentic style makes therapy feel like a conversation with someone who truly gets it.',
+            specialization: 'work stress, anxiety, relationships, life transitions',
+            rating: 4.6,
+            image: 'from-lime-400 to-green-400',
+            available: false,
+            createdAt: new Date(),
+        },
+        {
+            name: 'Dr. Samantha Brown',
+            email: 'samantha.brown@mindmate.com',
+            bio: 'Marriage & Family Therapist with 11 years specializing in couples therapy and relationship repair using emotionally focused therapy. I help partners reconnect, communicate effectively, and rebuild trust. My practice is inclusive and welcoming to all relationship structures and orientations.',
+            specialization: 'relationships, family therapy, anxiety, lgbtq+ issues',
+            rating: 4.8,
+            image: 'from-red-400 to-pink-400',
+            available: true,
+            createdAt: new Date(),
+        },
+        {
+            name: 'Dr. Thomas Garcia',
+            email: 'thomas.garcia@mindmate.com',
+            bio: 'Clinical Psychologist with 14 years treating bipolar disorder, depression, and co-occurring conditions. I provide comprehensive care that includes mood monitoring, coping skills development, and relapse prevention strategies. My evidence-based approach is tailored to each individual's unique needs and goals for stability and wellness.',
+            specialization: 'bipolar, depression, anxiety, addiction',
+            rating: 4.9,
+            image: 'from-purple-400 to-pink-400',
+            available: true,
+            createdAt: new Date(),
+        },
+    ];
+
+    await db.insert(therapists).values(sampleTherapists);
+    
+    console.log('✅ Therapists seeder completed successfully');
+}
+
+main().catch((error) => {
+    console.error('❌ Seeder failed:', error);
+});
